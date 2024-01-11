@@ -18,7 +18,7 @@ dirs: $(C_DIR)
 
 $(C_DIR):
 	@echo 'Creating directory: $<'
-	-mkdir $(C_DIR)
+	-mkdir -p $(C_DIR)
 
 # Each subdirectory must supply rules for building sources it contributes
 $(C_DIR)/%.c: $(FONT_DIR)/%.rawh
@@ -41,4 +41,4 @@ $(C_DIR)/%.c: $(FONT_DIR)/%.rawh
 clean:
 	-$(RM) $(C_FILES) 
 	-@echo ' '
-	
+
