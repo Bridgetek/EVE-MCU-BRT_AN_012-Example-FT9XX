@@ -3,7 +3,7 @@ S_DIR = S
 C_DIR = C
 # Folder where source files are located.
 JPG_DIR = .
-# Relative path from top of FT900_Debug/FT900_Release folder to JPG files.
+# Relative path from top of folder to JPG files.
 RELDIR = ../Images
 
 JPG_FILES := $(wildcard $(JPG_DIR)/*.jpg)

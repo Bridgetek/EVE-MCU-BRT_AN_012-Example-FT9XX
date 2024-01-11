@@ -414,9 +414,7 @@ To return to the main keyboard press the “Keyboard” button again.
 
 Pressing the “Z” button will show the special application screen. The keyboard or keypad can then be accessed with appropriate buttons.
 
- ![Virtual Custom Screen](docs/Figure10.jpg "Virtual Custom Screen")
-
-**Figure 10 Virtual Custom Screen**
+There is no functionality in the special application screen.
 
 ##	Keyboard Layouts
 
