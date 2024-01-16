@@ -390,7 +390,7 @@ The host PC connects via USB to the MM900EVxA module.
 
 ## Use of Application Note Software
 
-The virtual keyboard will wait until it is connected to a host. The FT81X/BT8XX display will indicate this with the Bridgetek logo and the caption “Waiting for host…”.
+The virtual keyboard will wait until it is connected to a host. The FT81X/BT8XX display will indicate this with the Bridgetek logo and the caption “Waiting for host...”.
 
 Once the host is connected then it will display the virtual keyboard.
 
