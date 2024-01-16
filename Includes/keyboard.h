@@ -237,13 +237,13 @@ enum {
  */
 //@{
 /// No report
-#define REP_NONE 0
+#define REPORT_ID_NONE 0
 /// Keyboard Report
-#define REP_KB 1
+#define REPORT_ID_KEYBOARD 1
 /// System Control Report
-#define REP_SC 2
+#define REPORT_ID_SYSTEM_CONTROL 2
 /// Consumer Control Report
-#define REP_CC 3
+#define REPORT_ID_CONSUMER_CONTROL 3
 //@}
 
 /** @name Tag map structure
@@ -254,22 +254,5 @@ struct tagmap_s {
 	uint8_t report;
 	uint16_t scancode;
 };
-
-
-int8_t keyboard_get_report_descriptor(int interface, const uint8_t **descriptor, uint16_t *len);
-int8_t keyboard_req_set_idle(int interface, uint8_t idle);
-int8_t keyboard_req_get_idle(int interface, uint8_t *idle);
-int8_t keyboard_req_set_protocol(int interface, uint8_t protocol);
-int8_t keyboard_req_get_protocol(int interface, uint8_t *protocol);
-int8_t keyboard_req_get_report(int interface, void *report);
-int8_t keyboard_req_set_report(int interface, void *report);
-int8_t keyboard_report_enabled(int interface);
-void keyboard_set_report_descriptor(int interface, const uint8_t *descriptor, uint16_t len);
-void keyboard_report_enable(int interface, int8_t enable);
-void keyboard_timer(void);
-void keyboard_start(void);
-int keyboard_loop(keyboard_in_report_structure_t *keyboard_report_in,
-		keyboard_out_report_structure_t *report_buffer_out,
-		control_in_report_structure_t *control_report_in);
 
 #endif /* INCLUDES_KEYBOARD_H_ */

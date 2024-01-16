@@ -63,6 +63,7 @@
 #include "eve_ui.h"
 
 #include "keyboard.h"
+#include "usb_keyboard.h"
 
 /**
  @brief Include a DFU Interface in the configuration.
@@ -1602,7 +1603,7 @@ uint8_t usbd_testing(void)
 							// If the touchscreen has a keypress to send then send it.
 							report = keyboard_loop(&keyboard_report_in, &keyboard_report_out, &control_report_in);
 
-							if (report == REP_KB)
+							if (report == REPORT_ID_KEYBOARD)
 							{
 								if (keyboard_report_enabled(0))
 								{
@@ -1610,7 +1611,7 @@ uint8_t usbd_testing(void)
 									USBD_transfer(HID_KEYBOARD_IN_EP, (uint8_t *)&keyboard_report_in, sizeof(keyboard_in_report_structure_t));
 								}
 							}
-							if ((report == REP_SC) || (report == REP_CC))
+							if ((report == REPORT_ID_SYSTEM_CONTROL) || (report == REPORT_ID_CONSUMER_CONTROL))
 							{
 								if (keyboard_report_enabled(1))
 								{
