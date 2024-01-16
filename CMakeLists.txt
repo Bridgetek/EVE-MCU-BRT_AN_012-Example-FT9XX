@@ -93,7 +93,7 @@ file(GLOB IMAGE_FILES CONFIGURE_DEPENDS
 # Compile a list of source files.
 file(GLOB SRC_FILES CONFIGURE_DEPENDS
 	Sources/main.c
-	Sources/keyboard.c
+	Sources/usb_keyboard.c
 	Sources/eve_keyboard.c
 	lib/eve/ports/eve_arch_ft9xx/*.c
 	lib/eve/source/*.c
