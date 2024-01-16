@@ -12,7 +12,7 @@
  *
  * This source code ("the Software") is provided by Bridgetek Pte Ltd
  * ("Bridgetek") subject to the licence terms set out
- * http://www.ftdichip.com/FTSourceCodeLicenceTerms.htm ("the Licence Terms").
+ * http://brtchip.com/BRTSourceCodeLicenseAgreement/ ("the Licence Terms").
  * You must read the Licence Terms before downloading or using the Software.
  * By installing or using the Software you agree to the Licence Terms. If you
  * do not agree to the Licence Terms then do not download or use the Software.
@@ -1012,7 +1012,7 @@ int8_t class_req_interface_hid(USB_device_request *req)
 	switch (req->bRequest)
 	{
 	case USB_HID_REQUEST_CODE_SET_IDLE:
-		status = keyboard_req_set_idle(interface, req);
+		status = keyboard_req_set_idle(interface, req->wValue >> 8);
 		if (status == USBD_OK)
 		{
 			// ACK packet
@@ -1021,7 +1021,7 @@ int8_t class_req_interface_hid(USB_device_request *req)
 		break;
 
 	case USB_HID_REQUEST_CODE_GET_IDLE:
-		status = keyboard_req_get_idle(interface, req, &idle);
+		status = keyboard_req_get_idle(interface, &idle);
 		if (status == USBD_OK)
 		{
 			USBD_transfer_ep0(USBD_DIR_IN, &idle, 1, 1);
@@ -1031,7 +1031,7 @@ int8_t class_req_interface_hid(USB_device_request *req)
 		break;
 
 	case USB_HID_REQUEST_CODE_SET_PROTOCOL:
-		status = keyboard_req_set_protocol(interface, req);
+		status = keyboard_req_set_protocol(interface, req->wValue >> 8);
 		if (status == USBD_OK)
 		{
 			// ACK packet
@@ -1040,7 +1040,7 @@ int8_t class_req_interface_hid(USB_device_request *req)
 		break;
 
 	case USB_HID_REQUEST_CODE_GET_PROTOCOL:
-		status = keyboard_req_get_protocol(interface, req, &protocol);
+		status = keyboard_req_get_protocol(interface, &protocol);
 		if (status == USBD_OK)
 		{
 			USBD_transfer_ep0(USBD_DIR_IN, &protocol, 1, 1);
@@ -1467,6 +1467,7 @@ void suspend_cb(uint8_t status)
 
 	printf("Suspend\r\n");
 
+	eve_keyboard_splash("Waiting for host...", 0);
 	eve_ui_wait();
 
 	return;

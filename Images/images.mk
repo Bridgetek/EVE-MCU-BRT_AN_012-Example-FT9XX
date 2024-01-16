@@ -37,7 +37,7 @@ $(S_DIR)/%.S: $(JPG_DIR)/%.jpg
 	@echo .align 4 >> $@
 	@echo .global img_$(SYMNAME) >> $@
 	@echo img_$(SYMNAME): >> $@
-	@echo .incbin \"$(RELDIR)/$<\" >> $@
+	@echo .incbin \"../Images/$<\" >> $@
 	@echo .global img_end_$(SYMNAME) >> $@
 	@echo img_end_$(SYMNAME): >> $@
 	@echo 'Finished making file: $@'
@@ -50,8 +50,13 @@ $(C_DIR)/%.c: $(JPG_DIR)/%.rawh
 	@echo 'Symbol: font_$(SYMNAME)'
 	@echo "/* Auto-generated file by images.mk */" > $@
 	@echo "#include <stdint.h>" >> $@
-	@echo "#include <ft900.h>" >> $@
-	@echo "const uint8_t __flash__ img_$(SYMNAME)[]  __attribute__((aligned(4))) = { " >> $@
+	@echo "#include <stddef.h>" >> $@
+	@echo "#if defined(__FT900__) && !defined(__CDT_PARSER__)" >> $@
+	@echo "#define EVE_UI_FLASH __flash__" >> $@
+	@echo "#else" >> $@
+	@echo "#define EVE_UI_FLASH" >> $@
+	@echo "#endif // __FT900__" >> $@
+	@echo "const uint8_t EVE_UI_FLASH img_$(SYMNAME)[]  __attribute__((aligned(4))) = { " >> $@
 	@cat $< >> $@
 	@echo "};" >> $@
 	@echo "const uint32_t img_$(SYMNAME)_size = sizeof(img_$(SYMNAME)); " >> $@

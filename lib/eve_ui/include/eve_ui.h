@@ -43,11 +43,19 @@
 #ifndef _EVE_UI_H
 #define _EVE_UI_H
 
-#include <ft900.h>
+#include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/* Implement flash address space for FT9xx. */
+#if defined(__FT900__) && !defined(__CDT_PARSER__)
+#define EVE_UI_FLASH __flash__
+#else
+#define EVE_UI_FLASH
+#endif // __FT900__ && !__CDT_PARSER__
 
 /**
  * @brief Theme colours.
@@ -69,9 +77,9 @@ extern "C" {
 #endif //EVE_COLOUR_FG_1
 //@}
 
-#ifndef EVE_SPACER
-#define EVE_SPACER (EVE_DISP_WIDTH / 120)
-#endif //EVE_SPACER
+#ifndef EVE_UI_SPACER
+#define EVE_UI_SPACER (EVE_DISP_WIDTH / 120)
+#endif //EVE_UI_SPACER
 
 /**
  @brief Custom font and bitmap definitions.
@@ -79,6 +87,14 @@ extern "C" {
  */
 //@{
 #define FONT_HEADER 28
+
+/** @name Key TAG Definitions
+ * @details Common key definitions.
+ */
+//@{
+#define TAG_NO_ACTION		255
+#define TAG_RESERVED_START 	240
+//@}
 
 /**
  @brief Structure to hold touchscreen calibration settings.
@@ -90,38 +106,38 @@ struct touchscreen_calibration {
 	uint32_t transform[6];
 };
 
+/* Prototypes from eve_ui_main.c */
 void eve_ui_calibrate();
 void eve_ui_play_sound(uint8_t sound, uint8_t volume);
 uint8_t eve_ui_read_tag(uint8_t *key);
 
 void eve_ui_setup();
 void eve_ui_wait(void);
-
 void eve_ui_screenshot(void);
 
 /* Platform specific functions. */
 int8_t eve_ui_arch_flash_calib_init(void);
 int8_t eve_ui_arch_flash_calib_write(struct touchscreen_calibration *calib);
 int8_t eve_ui_arch_flash_calib_read(struct touchscreen_calibration *calib);
-void eve_ui_arch_write_cmd_from_flash(const uint8_t __flash__ *ImgData, uint32_t length);
-void eve_ui_arch_write_ram_from_flash(const uint8_t __flash__ *ImgData, uint32_t length, uint32_t dest);
-void eve_ui_arch_write_ram_from_pm(const uint8_t __flash__ *ImgData, uint32_t length, uint32_t dest);
+void eve_ui_arch_write_ram_from_pm(const uint8_t EVE_UI_FLASH *ImgData, uint32_t length, uint32_t dest);
+void eve_ui_memcpy_pm(void *dst, const EVE_UI_FLASH void* src, size_t s);
+void eve_ui_arch_sleepms(uint32_t);
 
-uint8_t eve_ui_read_tag(uint8_t *key);
-void eve_ui_play_sound(uint8_t sound, uint8_t volume);
+/* Prototypes from eve_ui_load_images.c */
+uint32_t eve_ui_jpg_image_size(const uint8_t EVE_UI_FLASH *image_data, uint16_t *width, uint16_t *height);
+uint32_t eve_ui_load_jpg(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle);
+uint32_t eve_ui_load_argb2(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle,
+		uint16_t img_width, uint16_t img_height);
+uint32_t eve_ui_load_argb1555(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle,
+		uint16_t img_width, uint16_t img_height);
 
-uint32_t eve_ui_jpg_image_size(const uint8_t __flash__ *image_data, uint16_t *width, uint16_t *height);
-uint32_t eve_ui_load_jpg(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle);
-uint32_t eve_ui_load_argb2(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle,
-		uint16_t img_width, uint16_t img_height);
-uint32_t eve_ui_load_argb1555(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle,
-		uint16_t img_width, uint16_t img_height);
+/* Prototypes from eve_ui_load_font.c */
 uint8_t eve_ui_font_header(uint8_t font_handle, EVE_GPU_FONT_HEADER *font_hdr);
 uint8_t eve_ui_font_size(uint8_t font_handle, uint16_t *width, uint16_t *height);
 uint8_t eve_ui_font_char_width(uint8_t font_handle, char ch);
 uint8_t eve_ui_font_string_width(uint8_t font_handle, const char *str);
-uint32_t eve_ui_load_font(const uint8_t __flash__ *font_data, uint32_t font_size, uint8_t font_handle);
-uint32_t eve_ui_load_font2(uint8_t first, const uint8_t __flash__ *font_data, uint32_t font_size, uint8_t font_handle);
+uint32_t eve_ui_load_font(const uint8_t EVE_UI_FLASH *font_data, uint32_t font_size, uint8_t font_handle);
+uint32_t eve_ui_load_font2(uint8_t first, const uint8_t EVE_UI_FLASH *font_data, uint32_t font_size, uint8_t font_handle);
 
 #ifdef __cplusplus
 } /* extern "C" */

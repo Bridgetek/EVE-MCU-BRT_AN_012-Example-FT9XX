@@ -1,0 +1,35 @@
+Release Information
+=================== 
+  
+These are Release Notes of Application Note BRT_AN_012 FT9xx USBD HID Touch Panel.
+
+Revision Information 
+==================== 
+ 
+Version: 1.3
+
+Date
+====
+2019-Mar-05
+
+
+Restrictions:
+- This release will support FT9xx Toolchain version V2.5.0 and later. Older toolchain versions are not supported due to an API change in the usbd.c library file.
+
+Known issues:
+- When building in Eclipse, the build process will sometimes stop with the message:
+        make: *** Access is denied.
+        .  Stop.
+        make: *** Waiting for unfinished jobs....
+	Or build may slow down with messages for anti-virus scanning of the toolchain's ft32-elf-*.exe files. 
+  This is a known issue with some antivirus software, such as AVG.
+  Workarounds include (depending on the antivirus software):
+	- Temporary disable the antivirus software 
+	- Add exceptions to every "exe/bat" under the "<installation folder>\Toolchain\tools\*" folder
+
+Fixed issues:
+- Support usbd.c API in toolchain V2.5.0 and above.
+
+Feature requests:
+- None.
+

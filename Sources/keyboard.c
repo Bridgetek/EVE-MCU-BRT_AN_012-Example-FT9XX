@@ -185,26 +185,26 @@ int8_t keyboard_get_report_descriptor(int interface, const uint8_t **descriptor,
 	return USBD_OK;
 }
 
-int8_t keyboard_req_set_idle(int interface, USB_device_request *req)
+int8_t keyboard_req_set_idle(int interface, uint8_t idle)
 {
 	report_enable[interface] = 1;
-	report_idle[interface] = req->wValue >> 8;
+	report_idle[interface] = idle;
 	return USBD_OK;
 }
 
-int8_t keyboard_req_get_idle(int interface, USB_device_request *req, uint8_t *idle)
+int8_t keyboard_req_get_idle(int interface, uint8_t *idle)
 {
 	*idle = report_idle[interface];
 	return USBD_OK;
 }
 
-int8_t keyboard_req_set_protocol(int interface, USB_device_request *req)
+int8_t keyboard_req_set_protocol(int interface, uint8_t protocol)
 {
-	report_protocol[interface] = req->wValue & 0xff;
+	report_protocol[interface] = protocol;
 	return USBD_OK;
 }
 
-int8_t keyboard_req_get_protocol(int interface, USB_device_request *req, uint8_t *protocol)
+int8_t keyboard_req_get_protocol(int interface, uint8_t *protocol)
 {
 	*protocol = report_protocol[interface];
 	return USBD_OK;
@@ -251,7 +251,7 @@ void keyboard_start()
 {
 	eve_keyboard_start();
 	// Draw a waiting for host message.
-	eve_splash("Waiting for host...", OPTIONS_HEADER_LOGO);
+	eve_keyboard_splash("Waiting for host...", OPTIONS_HEADER_LOGO);
 }
 
 int keyboard_loop(keyboard_in_report_structure_t *keyboard_report_in,

@@ -41,20 +41,24 @@
  * ============================================================================
  */
 #include <stdint.h>
-
-#include <ft900.h>
+#include <stddef.h>
+#include <machine/endian.h>
 
 #include "EVE_config.h"
 #include "EVE.h"
 
+#ifdef __CDT_PARSER__
+#define __flash__ // to avoid eclipse syntax error
+#endif
+
 #include "eve_ui.h"
 #include "eve_ram_g.h"
 
-uint32_t eve_ui_jpg_image_size(const uint8_t __flash__ *image_data, uint16_t *width, uint16_t *height)
+uint32_t eve_ui_jpg_image_size(const uint8_t EVE_UI_FLASH *image_data, uint16_t *width, uint16_t *height)
 {
 	uint16_t img_width = 0;
 	uint16_t img_height = 0;
-	uint8_t __flash__ *pCh = (uint8_t __flash__ *)image_data;
+	uint8_t EVE_UI_FLASH *pCh = (uint8_t EVE_UI_FLASH *)image_data;
 
 	// Read in raw JPEG encoded image data to find width and height of image.
 	while (1)
@@ -78,18 +82,18 @@ uint32_t eve_ui_jpg_image_size(const uint8_t __flash__ *image_data, uint16_t *wi
 		pCh++;
 	}
 
-#ifdef BIG_ENDIAN
-	*width = img_width;
-	*height = img_height;
-#else // LITTLE_ENDIAN
+#if BYTE_ORDER == BIG_ENDIAN
 	*width = (img_width >> 8) | (img_width << 8);
 	*height = (img_height >> 8) | (img_height << 8);
+#else
+	*width = img_width;
+	*height = img_height;
 #endif
 
 	return img_width * 2 * img_height;
 }
 
-uint32_t eve_ui_load_argb2(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle,
+uint32_t eve_ui_load_argb2(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle,
 		uint16_t img_width, uint16_t img_height)
 {
 	uint32_t img_offset;
@@ -120,7 +124,7 @@ uint32_t eve_ui_load_argb2(const uint8_t __flash__ *image_data, uint32_t image_s
 	return img_offset;
 }
 
-uint32_t eve_ui_load_argb1555(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle,
+uint32_t eve_ui_load_argb1555(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle,
 		uint16_t img_width, uint16_t img_height)
 {
 	uint32_t img_offset;
@@ -151,18 +155,19 @@ uint32_t eve_ui_load_argb1555(const uint8_t __flash__ *image_data, uint32_t imag
 	return img_offset;
 }
 
-uint32_t eve_ui_load_jpg(const uint8_t __flash__ *image_data, uint32_t image_size, uint8_t image_handle)
+uint32_t eve_ui_load_jpg(const uint8_t EVE_UI_FLASH *image_data, uint32_t image_size, uint8_t image_handle)
 {
 	uint32_t img_offset;
 	uint32_t img_expanded_size;
 	uint16_t img_width = 0;
 	uint16_t img_height = 0;
-	uint8_t __flash__ *pData = (uint8_t __flash__ *)image_data;
+	uint8_t EVE_UI_FLASH *pData = (uint8_t EVE_UI_FLASH *)image_data;
 	uint8_t ramData[256];
 
 	img_expanded_size = eve_ui_jpg_image_size(image_data, &img_width, &img_height);
 
 	img_offset = malloc_ram_g(img_expanded_size);
+
 	if (img_offset)
 	{
 		EVE_LIB_BeginCoProList();
@@ -176,7 +181,7 @@ uint32_t eve_ui_load_jpg(const uint8_t __flash__ *image_data, uint32_t image_siz
 			{
 				length = 256;
 			}
-			memcpy_pm2dat(ramData, (const __flash__ void *)pData, length);
+			eve_ui_memcpy_pm(ramData, (const EVE_UI_FLASH void *)pData, length);
 			EVE_LIB_WriteDataToCMD(ramData, length);
 			pData += length;
 			image_size -= length;

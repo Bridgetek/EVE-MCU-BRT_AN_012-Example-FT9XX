@@ -182,5 +182,10 @@ void eve_ui_keyboard_set_screen(uint8_t screen);
 uint8_t eve_ui_keyboard_get_screen(void);
 void eve_ui_keyboard_set_components(uint32_t components);
 uint32_t eve_ui_keyboard_get_components(void);
+void eve_ui_keyboard_font(uint8_t font, uint8_t altfont);
+void eve_ui_keyboard_screen(uint32_t bg);
+void eve_ui_keyboard_leds(uint32_t on, uint32_t off);
+void eve_ui_keyboard_buttons(uint32_t fg, uint32_t fg_alt, uint32_t fg_highlight,
+		uint32_t bg, uint32_t bg_alt, uint32_t bg_highlight);
 
 #endif /* SOURCES_EVE_UI_KEYBOAD_H_ */

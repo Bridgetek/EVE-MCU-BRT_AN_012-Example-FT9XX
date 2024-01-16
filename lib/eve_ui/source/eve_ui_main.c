@@ -44,6 +44,7 @@
 /* INCLUDES ************************************************************************/
 
 #include <stdint.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -51,6 +52,10 @@
 #include "EVE_config.h"
 #include "EVE.h"
 #include "HAL.h"
+
+#ifdef __CDT_PARSER__
+#define __flash__ // to avoid eclipse syntax error
+#endif
 
 #include "eve_ui.h"
 #include "eve_ram_g.h"
@@ -88,7 +93,7 @@ void eve_ui_wait(void)
 	if (key_detect)
 	{
 	}
-	delayms(100);
+	eve_ui_arch_sleepms(100);
 }
 
 void eve_ui_calibrate()
@@ -105,7 +110,8 @@ void eve_ui_calibrate()
 		EVE_CLEAR(1,1,1);
 		EVE_COLOR_RGB(255, 255, 255);
 		EVE_CMD_TEXT(EVE_DISP_WIDTH/2, EVE_DISP_HEIGHT/2,
-				FONT_HEADER, EVE_OPT_CENTERX|EVE_OPT_CENTERY,"Please tap on the dots");
+				FONT_HEADER, EVE_OPT_CENTERX | EVE_OPT_CENTERY,
+				"Please tap on the dots");
 		EVE_CMD_CALIBRATE(0);
 		EVE_LIB_EndCoProList();
 		EVE_LIB_AwaitCoProEmpty();
@@ -134,7 +140,6 @@ void eve_ui_screenshot()
 	uint32_t img_end_address = malloc_ram_g(1);
 
 	printf("Screenshot...\n");
-	CRITICAL_SECTION_BEGIN
 
 	// Write screenshot into RAM_G
 	EVE_LIB_BeginCoProList();
@@ -155,12 +160,9 @@ void eve_ui_screenshot()
 	printf("ARGB end\n"); // Marker to identify the end of the image.
 
 	//eve_ui_splash("Screenshot completed...", 0);
-	delayms(2000);
-
-	CRITICAL_SECTION_END
+	eve_ui_arch_sleepms(2000);
 
 	free_ram_g(img_end_address);
-
 #endif // ENABLE_SCREENSHOT
 }
 
@@ -186,3 +188,5 @@ uint8_t eve_ui_read_tag(uint8_t *key)
 
 	return key_detect;
 }
+
+

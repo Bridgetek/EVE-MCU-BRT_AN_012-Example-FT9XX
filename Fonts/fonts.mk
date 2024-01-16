@@ -28,8 +28,13 @@ $(C_DIR)/%.c: $(FONT_DIR)/%.rawh
 	@echo 'Symbol: font_$(SYMNAME)'
 	@echo "/* Auto-generated file by fonts.mk */" > $@
 	@echo "#include <stdint.h>" >> $@
-	@echo "#include <ft900.h>" >> $@
-	@echo "const uint8_t __flash__ font_$(SYMNAME)[]  __attribute__((aligned(4))) = " >> $@
+	@echo "#include <stddef.h>" >> $@
+	@echo "#if defined(__FT900__) && !defined(__CDT_PARSER__)" >> $@
+	@echo "#define EVE_UI_FLASH __flash__" >> $@
+	@echo "#else" >> $@
+	@echo "#define EVE_UI_FLASH" >> $@
+	@echo "#endif // __FT900__" >> $@
+	@echo "const uint8_t EVE_UI_FLASH font_$(SYMNAME)[]  __attribute__((aligned(4))) = " >> $@
 	@cat $< >> $@
 	@echo ";" >> $@
 	@echo >> $@

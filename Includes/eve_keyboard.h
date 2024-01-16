@@ -43,7 +43,8 @@
 #ifndef _EVE_KEYBOARD_H
 #define _EVE_KEYBOARD_H
 
-#include <ft900.h>
+#include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,25 +71,6 @@ extern "C" {
 //@}
 
 /**
- @brief Custom font and bitmap definitions.
- @details These utilise handles 0 to 14.
- */
-//@{
-#define KEYBOARD_FONT 0
-#define KEYBOARD_FONT_ALT 1
-
-#define BITMAP_BRIDGETEK_LOGO 2
-#define BITMAP_SETTINGS 3
-#define BITMAP_REFRESH 4
-#define BITMAP_CANCEL 5
-#define BITMAP_TICK 6
-#define BITMAP_KEYPAD 7
-#define BITMAP_KEYBOARD 8
-#define BITMAP_MEDIA 9
-#define BITMAP_Z 10
-//@}
-
-/**
  * @brief Theme colours.
  * @details The highlight colour is used for an active keypress on a button or
  * a selected option (e.g. caps lock).
@@ -106,27 +88,61 @@ extern "C" {
 #define KEY_COLOUR_BG_LEDS KEY_COLOUR_BG_BUTTONS_ALT
 //@}
 
-#define EVE_SPACER (EVE_DISP_WIDTH / 120)
+/**
+ @brief Custom font and bitmap definitions.
+ @details These utilise handles 0 to 14.
+ */
+//@{
+#define KEYBOARD_FONT 0
+#define KEYBOARD_FONT_ALT 1
+
+#define BITMAP_BRIDGETEK_LOGO 2
+#define BITMAP_SETTINGS 3
+#define BITMAP_REFRESH 4
+#define BITMAP_CANCEL 5
+#define BITMAP_TICK 6
+#define BITMAP_KEYPAD 7
+#define BITMAP_KEYBOARD 8
+#define BITMAP_MEDIA 9
+#define BITMAP_CUSTOM 10
+//@}
 
 /** @name Special Key TAG Definitions
  * @details Special key definitions switching between screen layouts.
  */
 //@{
-#define TAG_RESERVED_START 	240
-#define TAG_DE_ALPHA 		241			// Switch to Alphanumeric Screen Germany/Austria
-#define TAG_US_ALPHA 		242			// Switch to Alphanumeric Screen US
-#define TAG_UK_ALPHA 		243			// Switch to Alphanumeric Screen UK
-#define TAG_CUSTOM			246
-#define TAG_MEDIA			247
-#define TAG_REFRESH			248
-#define TAG_TICK			249
-#define TAG_KEYPAD			250
-#define TAG_KEYBOARD		251
-#define TAG_SETTINGS		252			// Click on Settings
-#define TAG_LOGO			253			// Click on Bridgetek logo
-#define TAG_CANCEL			254			// Cancel
-#define TAG_NO_ACTION		255
+#define TAG_DE_ALPHA 		(TAG_RESERVED_START + 0) // Switch to Alphanumeric Screen Germany/Austria
+#define TAG_US_ALPHA 		(TAG_RESERVED_START + 1) // Switch to Alphanumeric Screen US
+#define TAG_UK_ALPHA 		(TAG_RESERVED_START + 2) // Switch to Alphanumeric Screen UK
+#define TAG_CUSTOM			(TAG_RESERVED_START + 3)
+#define TAG_MEDIA			(TAG_RESERVED_START + 4)
+#define TAG_REFRESH			(TAG_RESERVED_START + 5)
+#define TAG_TICK			(TAG_RESERVED_START + 6)
+#define TAG_KEYPAD			(TAG_RESERVED_START + 7)
+#define TAG_KEYBOARD		(TAG_RESERVED_START + 8)
+#define TAG_SETTINGS		(TAG_RESERVED_START + 9) // Click on Settings
+#define TAG_LOGO			(TAG_RESERVED_START + 10) // Click on Bridgetek logo
+#define TAG_CANCEL			(TAG_RESERVED_START + 10) // Cancel
 //@}
+
+/**
+ * @brief Keyboard screen components to show on display.
+ */
+//@{
+#define EVE_HEADER_LOGO				(1 << 0) // Show logo
+#define EVE_HEADER_SETTINGS_BUTTON	(1 << 1) // Show settings button
+#define EVE_HEADER_CANCEL_BUTTON	(1 << 2) // Show cancel button
+#define EVE_HEADER_REFRESH_BUTTON	(1 << 3) // Show refresh button
+#define EVE_HEADER_SAVE_BUTTON		(1 << 4) // Show save button
+#define EVE_HEADER_KEYPAD_BUTTON	(1 << 5) // Show keypad button (switch to keypad)
+#define EVE_HEADER_KEYBOARD_BUTTON	(1 << 6) // Show keyboard button (switch to keyboard)
+#define EVE_HEADER_EXTRA_BUTTON		(1 << 7) // Show media button (switch to media controls)
+#define EVE_HEADER_SPECIAL_BUTTON	(1 << 8) // Show media button (switch to media controls)
+//@}
+
+/** @brief Spacer for gaps between keys.
+ */
+#define EVE_SPACER (EVE_DISP_WIDTH / 120)
 
 /** @name Key TAG Definitions
  * @details Key definitions for TAGs for touchscreen.
@@ -202,7 +218,7 @@ struct key_scan
 	uint8_t KeyTag;
 };
 
-void eve_splash(char *toast, uint32_t options);
+void eve_keyboard_splash(char *toast, uint32_t options);
 void eve_keyboard_start(void);
 int8_t eve_keyboard_loop(struct key_report *report, struct key_scan *scan);
 

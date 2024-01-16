@@ -5,8 +5,8 @@
  *      Author: Gordon.McNab
  */
 
-#include "stdint.h"
-#include "stddef.h"
+#include <stdint.h>
+#include <stddef.h>
 
 #include "EVE_config.h"
 #include "EVE.h"

@@ -57,21 +57,8 @@
 
 #include "eve_ui.h"
 
-/**
- @brief Link to datalogger area defined in crt0.S file.
- @details Must be passed to dlog library functions to initialise and use
-        datalogger functions. We use the datalogger area for persistent
-        configuration storage.
- */
-extern __flash__ uint32_t __dlog_partition[];
-
 /* CONSTANTS ***********************************************************************/
 
-/**
- @brief Page number in datalogger memory in Flash for touchscreen calibration
- values.
- */
-#define CONFIG_PAGE_TOUCHSCREEN 0
 /**
  @brief Key for identifying if touchscreen calibration values are programmed into
  datalogger memory in the Flash.
@@ -170,55 +157,6 @@ int8_t eve_ui_arch_flash_calib_read(struct touchscreen_calibration *calib)
 }
 //@}
 
-void eve_ui_arch_write_cmd_from_flash(const uint8_t __flash__ *ImgData, uint32_t length)
-{
-	uint32_t offset = 0;
-	uint8_t ramData[512];
-	uint32_t left;
-
-	while (offset < length)
-	{
-		memcpy_flash2dat(ramData, (uint32_t)ImgData, 512);
-
-		if (length - offset < 512)
-		{
-			left = length - offset;
-		}
-		else
-		{
-			left = 512;
-		}
-		EVE_LIB_WriteDataToCMD(ramData, left);
-		offset += left;
-		ImgData += left;
-	};
-}
-
-void eve_ui_arch_write_ram_from_flash(const uint8_t __flash__ *ImgData, uint32_t length, uint32_t dest)
-{
-	uint32_t offset = 0;
-	uint8_t ramData[512];
-	uint32_t left;
-
-	while (offset < length)
-	{
-		memcpy_flash2dat(ramData, (uint32_t)ImgData, 512);
-
-		if (length - offset < 512)
-		{
-			left = length - offset;
-		}
-		else
-		{
-			left = 512;
-		}
-		EVE_LIB_WriteDataToRAMG(ramData, left, dest);
-		offset += left;
-		ImgData += left;
-		dest += left;
-	};
-}
-
 void eve_ui_arch_write_cmd_from_pm(const uint8_t __flash__ *ImgData, uint32_t length)
 {
 	uint32_t offset = 0;
@@ -266,6 +204,16 @@ void eve_ui_arch_write_ram_from_pm(const uint8_t __flash__ *ImgData, uint32_t le
 		ImgData += left;
 		dest += left;
 	};
+}
+
+void eve_ui_memcpy_pm(void *dst, const __flash__ void * src, size_t s)
+{
+	memcpy_pm2dat(dst, src, s);
+}
+
+void eve_ui_arch_sleepms(uint32_t delay)
+{
+	delayms(delay);
 }
 
 /* FUNCTIONS ***********************************************************************/

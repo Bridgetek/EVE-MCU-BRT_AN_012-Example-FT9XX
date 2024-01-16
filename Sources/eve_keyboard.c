@@ -85,8 +85,8 @@ uint16_t img_keyboard_width;
 uint16_t img_keyboard_height;
 uint16_t img_media_width;
 uint16_t img_media_height;
-uint16_t img_z_width;
-uint16_t img_z_height;
+uint16_t img_special_width;
+uint16_t img_special_height;
 //@}
 
 static struct key_scan key_scan;
@@ -102,24 +102,43 @@ static uint16_t keyboard_font_height = 0;
 
 /* LOCAL FUNCTIONS / INLINES *******************************************************/
 
+static void eve_header_bar(uint32_t options);
+
 /* FUNCTIONS ***********************************************************************/
 
 // Extern links to fonts which are used here.
-extern const uint8_t __flash__ font_Montserrat_Bold_ttf_15_L4[];
+extern const uint8_t EVE_UI_FLASH font_Montserrat_Bold_ttf_15_L4[];
 extern const uint32_t font_Montserrat_Bold_ttf_15_L4_size;
-extern const uint8_t __flash__ font_arial_ttf_15_L4[];
+extern const uint8_t EVE_UI_FLASH font_arial_ttf_15_L4[];
 extern const uint32_t font_arial_ttf_15_L4_size;
-extern const uint8_t __flash__ img_bridgetek_logo_jpg[], img_end_bridgetek_logo_jpg[];
-extern const uint8_t __flash__ img_cancel_jpg[], img_end_cancel_jpg[];
-extern const uint8_t __flash__ img_keyboard_jpg[], img_end_keyboard_jpg[];
-extern const uint8_t __flash__ img_keypad_jpg[], img_end_keypad_jpg[];
-extern const uint8_t __flash__ img_media_jpg[], img_end_media_jpg[];
-extern const uint8_t __flash__ img_refresh_jpg[], img_end_refresh_jpg[];
-extern const uint8_t __flash__ img_settings_jpg[], img_end_settings_jpg[];
-extern const uint8_t __flash__ img_tick_jpg[], img_end_tick_jpg[];
-extern const uint8_t __flash__ img_z_jpg[], img_end_z_jpg[];
+extern const uint8_t EVE_UI_FLASH img_bridgetek_logo_jpg[], img_end_bridgetek_logo_jpg[];
+extern const uint8_t EVE_UI_FLASH img_cancel_jpg[], img_end_cancel_jpg[];
+extern const uint8_t EVE_UI_FLASH img_keyboard_jpg[], img_end_keyboard_jpg[];
+extern const uint8_t EVE_UI_FLASH img_keypad_jpg[], img_end_keypad_jpg[];
+extern const uint8_t EVE_UI_FLASH img_media_jpg[], img_end_media_jpg[];
+extern const uint8_t EVE_UI_FLASH img_refresh_jpg[], img_end_refresh_jpg[];
+extern const uint8_t EVE_UI_FLASH img_settings_jpg[], img_end_settings_jpg[];
+extern const uint8_t EVE_UI_FLASH img_tick_jpg[], img_end_tick_jpg[];
+extern const uint8_t EVE_UI_FLASH img_special_jpg[], img_end_special_jpg[];
 
-void eve_header_bar(uint32_t options)
+void eve_keyboard_splash(char *toast, uint32_t options)
+{
+	EVE_LIB_BeginCoProList();
+	EVE_CMD_DLSTART();
+	EVE_CLEAR_COLOR_RGB(0, 0, 0);
+	EVE_CLEAR(1,1,1);
+	//EVE_CLEAR_TAG(TAG_NO_ACTION);
+	EVE_COLOR_RGB(255, 255, 255);
+	eve_header_bar(EVE_HEADER_LOGO);
+	EVE_CMD_TEXT(EVE_DISP_WIDTH/2, EVE_DISP_HEIGHT/2,
+			FONT_HEADER, EVE_OPT_CENTERX | EVE_OPT_CENTERY, toast);
+	EVE_DISPLAY();
+	EVE_CMD_SWAP();
+	EVE_LIB_EndCoProList();
+	EVE_LIB_AwaitCoProEmpty();
+}
+
+static void eve_header_bar(uint32_t options)
 {
 	uint32_t x = EVE_SPACER;
 
@@ -196,9 +215,9 @@ void eve_header_bar(uint32_t options)
 	{
 		EVE_TAG(TAG_CUSTOM);
 		EVE_BEGIN(EVE_BEGIN_BITMAPS);
-		x -= (img_z_width + EVE_SPACER);
+		x -= (img_special_width + EVE_SPACER);
 		EVE_VERTEX_TRANSLATE_X(x * 16);
-		EVE_VERTEX2II(0, 0, BITMAP_Z, 0);
+		EVE_VERTEX2II(0, 0, BITMAP_CUSTOM, 0);
 	}
 
 	// Restore offset.
@@ -282,12 +301,24 @@ void eve_keyboard_start(void)
 	eve_ui_load_jpg(img_keyboard_jpg, img_end_keyboard_jpg - img_keyboard_jpg, BITMAP_KEYBOARD);
 	eve_ui_jpg_image_size(img_media_jpg, &img_media_width, &img_media_height);
 	eve_ui_load_jpg(img_media_jpg, img_end_media_jpg - img_media_jpg, BITMAP_MEDIA);
-	eve_ui_jpg_image_size(img_z_jpg, &img_z_width, &img_z_height);
-	eve_ui_load_jpg(img_z_jpg, img_end_z_jpg - img_z_jpg, BITMAP_Z);
+	eve_ui_jpg_image_size(img_special_jpg, &img_special_width, &img_special_height);
+	eve_ui_load_jpg(img_special_jpg, img_end_special_jpg - img_special_jpg, BITMAP_CUSTOM);
 
 	memset(&key_scan, 0xff, sizeof(struct key_scan));
 	memset(&key_report, 0xff, sizeof(struct key_report));
 
+	eve_ui_keyboard_font(KEYBOARD_FONT, KEYBOARD_FONT_ALT);
+	eve_ui_keyboard_screen(KEY_COLOUR_BG_SCREEN);
+	eve_ui_keyboard_leds(KEY_COLOUR_FG_LEDS,
+			KEY_COLOUR_BG_LEDS);
+	eve_ui_keyboard_buttons(
+			KEY_COLOUR_FG_BUTTONS,
+			KEY_COLOUR_FG_BUTTONS_ALT,
+			KEY_COLOUR_FG_BUTTONS_HIGHLIGHT,
+			KEY_COLOUR_BG_BUTTONS,
+			KEY_COLOUR_BG_BUTTONS_ALT,
+			KEY_COLOUR_BG_BUTTONS_HIGHLIGHT
+	);
 	eve_ui_keyboard_set_screen(KEYBOARD_SCREEN_ALPHANUMERIC);
 	eve_ui_keyboard_set_layout(KEYBOARD_LAYOUT_PC_UK_ALPHA);
 	eve_ui_keyboard_set_components(KEYBOARD_COMPONENTS_FULL_KEYBOARD);

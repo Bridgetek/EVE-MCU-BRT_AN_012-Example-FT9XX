@@ -41,16 +41,19 @@
  * ============================================================================
  */
 #include <stdint.h>
-
-#include <ft900.h>
+#include <stddef.h>
 
 #include "EVE_config.h"
 #include "EVE.h"
 
+#ifdef __CDT_PARSER__
+#define __flash__ // to avoid eclipse syntax error
+#endif
+
 #include "eve_ui.h"
 #include "eve_ram_g.h"
 
-static const __flash__ EVE_GPU_FONT_HEADER *font_pm_pointers[32] = {0};
+static const EVE_UI_FLASH EVE_GPU_FONT_HEADER *font_pm_pointers[32] = {0};
 
 uint8_t eve_ui_font_header(uint8_t font_handle, EVE_GPU_FONT_HEADER *font_hdr)
 {
@@ -61,7 +64,7 @@ uint8_t eve_ui_font_header(uint8_t font_handle, EVE_GPU_FONT_HEADER *font_hdr)
 	{
 		if (font_pm_pointers[font_handle])
 		{
-			memcpy_pm2dat(font_hdr, font_pm_pointers[font_handle], sizeof(EVE_GPU_FONT_HEADER));
+			eve_ui_memcpy_pm(font_hdr, font_pm_pointers[font_handle], sizeof(EVE_GPU_FONT_HEADER));
 			return 0;
 		}
 		else if (font_handle >= 16)
@@ -122,9 +125,9 @@ uint8_t eve_ui_font_string_width(uint8_t font_handle, const char *str)
 	return width;
 }
 
-static uint32_t eve_ui_load_fontx(uint8_t first, const uint8_t __flash__ *font_data, uint32_t font_size, uint8_t font_handle)
+static uint32_t eve_ui_load_fontx(uint8_t first, const uint8_t EVE_UI_FLASH *font_data, uint32_t font_size, uint8_t font_handle)
 {
-	const __flash__ EVE_GPU_FONT_HEADER *font_hdr = (__flash__ EVE_GPU_FONT_HEADER *)font_data;
+	const EVE_UI_FLASH EVE_GPU_FONT_HEADER *font_hdr = (EVE_UI_FLASH EVE_GPU_FONT_HEADER *)font_data;
 	uint32_t font_offset;
 
 	font_offset = malloc_ram_g(font_size);
@@ -134,7 +137,7 @@ static uint32_t eve_ui_load_fontx(uint8_t first, const uint8_t __flash__ *font_d
 		{
 			font_pm_pointers[font_handle] = font_hdr;
 
-			eve_ui_arch_write_ram_from_pm((const uint8_t __flash__ *)font_hdr, font_size, font_offset);
+			eve_ui_arch_write_ram_from_pm((const uint8_t EVE_UI_FLASH *)font_hdr, font_size, font_offset);
 
 			EVE_LIB_BeginCoProList();
 			EVE_CMD_DLSTART();
@@ -167,12 +170,12 @@ static uint32_t eve_ui_load_fontx(uint8_t first, const uint8_t __flash__ *font_d
 	return font_offset;
 }
 
-uint32_t eve_ui_load_font(const uint8_t __flash__ *font_data, uint32_t font_size, uint8_t font_handle)
+uint32_t eve_ui_load_font(const uint8_t EVE_UI_FLASH *font_data, uint32_t font_size, uint8_t font_handle)
 {
 	return eve_ui_load_fontx(0, font_data, font_size, font_handle);
 }
 
-uint32_t eve_ui_load_font2(uint8_t first, const uint8_t __flash__ *font_data, uint32_t font_size, uint8_t font_handle)
+uint32_t eve_ui_load_font2(uint8_t first, const uint8_t EVE_UI_FLASH *font_data, uint32_t font_size, uint8_t font_handle)
 {
 	return eve_ui_load_fontx(first, font_data, font_size, font_handle);
 }

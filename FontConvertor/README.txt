@@ -10,7 +10,7 @@ The contents of the file arial_utf8_extra.txt15\L4\arial.ttf_15_L4.rawh were
 then copied into the "Fonts" folder of the project. These are converted to
 a C file with the variables:
 	const uint32_t font_arial_ttf_15_L4_size; /* Size of font data */
-	const uint8_t __flash__ font_arial_ttf_15_L4[]; /* Font data */
+	const uint8_t font_arial_ttf_15_L4[]; /* Font data */
 	 
 The utf8_extra font collection has the following characters mapped:
 

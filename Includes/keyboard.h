@@ -45,8 +45,6 @@
 #define INCLUDES_KEYBOARD_H_
 
 #include <eve_keyboard.h>
-#include <ft900_usb.h>
-#include <ft900_usb_hid.h>
 
 
 /* For MikroC const qualifier will place variables in Flash
@@ -259,10 +257,10 @@ struct tagmap_s {
 
 
 int8_t keyboard_get_report_descriptor(int interface, const uint8_t **descriptor, uint16_t *len);
-int8_t keyboard_req_set_idle(int interface, USB_device_request *req);
-int8_t keyboard_req_get_idle(int interface, USB_device_request *req, uint8_t *idle);
-int8_t keyboard_req_set_protocol(int interface, USB_device_request *req);
-int8_t keyboard_req_get_protocol(int interface, USB_device_request *req, uint8_t *protocol);
+int8_t keyboard_req_set_idle(int interface, uint8_t idle);
+int8_t keyboard_req_get_idle(int interface, uint8_t *idle);
+int8_t keyboard_req_set_protocol(int interface, uint8_t protocol);
+int8_t keyboard_req_get_protocol(int interface, uint8_t *protocol);
 int8_t keyboard_req_get_report(int interface, void *report);
 int8_t keyboard_req_set_report(int interface, void *report);
 int8_t keyboard_report_enabled(int interface);

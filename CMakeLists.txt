@@ -41,19 +41,9 @@ project(${PROJECT})
 
 # Make a variable for the executable output. This is normally based on the project name.
 set(EXECUTABLE ${PROJECT}.elf)
-        
-# Compile a list of source files.
-file(GLOB SRC_FILES CONFIGURE_DEPENDS
-	Sources/main.c
-	Sources/keyboard.c
-	Sources/eve_keyboard.c
-	lib/eve/ports/eve_arch_ft9xx/*.c
-	lib/eve/source/*.c
-	lib/eve_ui/eve_ui_arch_ft9xx/*.c
-	lib/eve_ui/source/*.c
-	lib/eve_ui_keyboard/*.c
-)
 
+set( CMAKE_VERBOSE_MAKEFILE on )
+        
 # Find any linker scripts. Uses glob to find files.
 file(GLOB LDSCRIPT_FILES CONFIGURE_DEPENDS Scripts/*.ld)
 
@@ -68,8 +58,7 @@ endif()
 
 set(FONT_MAKEFILE "Fonts/fonts.mk")
 set(FONT_OUTFILES 
-	${CMAKE_SOURCE_DIR}/Fonts/C/Montserrat_Bold.ttf_15_L4.c
-	${CMAKE_SOURCE_DIR}/Fonts/C/arial.ttf_15_L4.c
+	${CMAKE_SOURCE_DIR}/Fonts/C/*.c
 )
 add_custom_command(OUTPUT ${FONT_OUTFILES}
 	PRE_BUILD
@@ -99,6 +88,18 @@ add_custom_target(MAKE_IMAGES ALL DEPENDS ${IMAGES_OUTFILES})
 # Compile a list of Image source files.
 file(GLOB IMAGE_FILES CONFIGURE_DEPENDS
 	Images/S/*.S
+)
+
+# Compile a list of source files.
+file(GLOB SRC_FILES CONFIGURE_DEPENDS
+	Sources/main.c
+	Sources/keyboard.c
+	Sources/eve_keyboard.c
+	lib/eve/ports/eve_arch_ft9xx/*.c
+	lib/eve/source/*.c
+	lib/eve_ui/eve_ui_arch_ft9xx/*.c
+	lib/eve_ui/source/*.c
+	lib/eve_ui_keyboard/*.c
 )
 
 # Override toolchain include directories with files from this directory. 
