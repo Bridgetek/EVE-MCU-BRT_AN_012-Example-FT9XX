@@ -75,11 +75,8 @@ Source code is divided in folders for functional components.
 
 The main part of the application is found in the `Sources` folder. This consists of the following files: 
 - The `main.c` file is generally responsible for the FT9xx setup and USB device code.
-- The file `keyboard.c` implements an interface between the USB device and the FT81X/BT8XX display.
+- The file `usb_keyboard.c` implements an interface between the USB device and the FT81X/BT8XX display.
 - Another file `eve_keyboard.c` controls the EVE keyboard component in the library.
-
-The other file in this folder is:
--  “crt0.S” a modified start-up file (in FT9xx assembly language) to allow the application to write to a protected section of FlashROM on the device.
 
 Files in these folders use the `Includes` folder for application specific header files.
 
