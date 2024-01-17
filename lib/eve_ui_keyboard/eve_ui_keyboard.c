@@ -97,8 +97,8 @@ static const uint8_t keymap_bot_row_us[] = {TAG_Z, TAG_X, TAG_C, TAG_V, TAG_B, T
 static uint8_t font_normal = 0;
 static uint32_t font_alt = 1;
 static uint32_t screen_bg = KEY_COLOUR_BG_SCREEN;
-static uint32_t led_on = KEY_COLOUR_FG_BUTTONS_ALT;
-static uint32_t led_off = KEY_COLOUR_BG_BUTTONS_ALT;
+static uint32_t led_on = KEY_COLOUR_FG_LEDS;
+static uint32_t led_off = KEY_COLOUR_BG_LEDS;
 static uint32_t button_fg = KEY_COLOUR_FG_BUTTONS;
 static uint32_t button_fg_alt = KEY_COLOUR_FG_BUTTONS_ALT;
 static uint32_t button_fg_highlight = KEY_COLOUR_FG_BUTTONS_HIGHLIGHT;
@@ -116,7 +116,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_KEYPAD_CONTROL)
 	{
-		button_colour = (pScan->KeyTag == TAG_PRINT_SCREEN)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PRINT_SCREEN)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PRINT_SCREEN); // Print Screen
 		EVE_CMD_BUTTON(
@@ -124,7 +124,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), (KEY_HEIGHT_KEYPAD(1) *2) / 3,
 				font_normal, EVE_OPT_FLAT, "PrtScr");
 
-		button_colour = (pReport->Scroll)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pReport->Scroll)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_SCROLL_LOCK); // Scroll Lock
 		EVE_CMD_BUTTON(
@@ -132,7 +132,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), (KEY_HEIGHT_KEYPAD(1) *2) / 3,
 				font_normal, EVE_OPT_FLAT, "ScrLock");
 
-		button_colour = (pScan->KeyTag == TAG_PAUSE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAUSE)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAUSE); // Pause
 		EVE_CMD_BUTTON(
@@ -140,7 +140,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), (KEY_HEIGHT_KEYPAD(1) *2) / 3,
 				font_normal, EVE_OPT_FLAT, "Pause");
 
-		button_colour = (pScan->KeyTag == TAG_INSERT)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_INSERT)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_INSERT); // Insert
 		EVE_CMD_BUTTON(
@@ -148,7 +148,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "Ins");
 
-		button_colour = (pScan->KeyTag == TAG_HOME)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_HOME)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_HOME); // Home
 		EVE_CMD_BUTTON(
@@ -156,7 +156,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "Home");
 
-		button_colour = (pScan->KeyTag == TAG_PAGE_UP)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAGE_UP)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAGE_UP); // Page Up
 		EVE_CMD_BUTTON(
@@ -164,7 +164,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "PgUp");
 
-		button_colour = (pScan->KeyTag == TAG_DEL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_DEL)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_DEL); // Delete
 		EVE_CMD_BUTTON(
@@ -172,7 +172,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "Del");
 
-		button_colour = (pScan->KeyTag == TAG_END)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_END)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_END); // End
 		EVE_CMD_BUTTON(
@@ -180,7 +180,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "End");
 
-		button_colour = (pScan->KeyTag == TAG_PAGE_DOWN)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAGE_DOWN)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAGE_DOWN); // Page Down
 		EVE_CMD_BUTTON(
@@ -188,7 +188,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "PgDn");
 
-		button_colour = (pScan->KeyTag == TAG_UP_ARROW)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_UP_ARROW)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_UP_ARROW); // Up Arrow
 		EVE_CMD_BUTTON(
@@ -196,7 +196,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x02");
 
-		button_colour = (pScan->KeyTag == TAG_LEFT_ARROW)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_LEFT_ARROW)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_LEFT_ARROW); // Left Arrow
 		EVE_CMD_BUTTON(
@@ -204,7 +204,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x01");
 
-		button_colour = (pScan->KeyTag == TAG_DOWN_ARROW)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_DOWN_ARROW)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_DOWN_ARROW); // Down Arrow
 		EVE_CMD_BUTTON(
@@ -212,7 +212,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x04");
 
-		button_colour = (pScan->KeyTag == TAG_RIGHT_ARROW)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_RIGHT_ARROW)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_RIGHT_ARROW); // Right Arrow
 		EVE_CMD_BUTTON(
@@ -222,7 +222,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 	}
 	else
 	{
-		button_colour = (pScan->KeyTag == TAG_BACKSPACE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_BACKSPACE)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_BACKSPACE); // Backspace
 		EVE_CMD_BUTTON(
@@ -233,7 +233,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_KEYPAD_CONTROL)
 	{
-		button_colour = (pReport->Numeric)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pReport->Numeric)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_NUMBER_LOCK); // Num Lock
 		EVE_CMD_BUTTON(
@@ -244,7 +244,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_KEYPAD_ARITH)
 	{
-		button_colour = (pScan->KeyTag == TAG_PAD_DIV)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_DIV)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_DIV); //
 		EVE_CMD_BUTTON(
@@ -252,7 +252,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "/");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_MUL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_MUL)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_MUL); //
 		EVE_CMD_BUTTON(
@@ -260,7 +260,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "*");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_MINUS)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_MINUS)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_MINUS); //
 		EVE_CMD_BUTTON(
@@ -268,7 +268,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "-");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_PLUS)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_PLUS)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_PLUS); //
 		EVE_CMD_BUTTON(
@@ -277,7 +277,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				font_normal, EVE_OPT_FLAT, "+");
 	}
 
-	button_colour = (pScan->KeyTag == TAG_PAD_ENTER)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->KeyTag == TAG_PAD_ENTER)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_PAD_ENTER); //
 	EVE_CMD_BUTTON(
@@ -287,7 +287,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 
 	if (pReport->Numeric)
 	{
-		button_colour = (pScan->KeyTag == TAG_PAD_7)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_7)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_7); //
 		EVE_CMD_BUTTON(
@@ -295,7 +295,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "7");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_8)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_8)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_8); //
 		EVE_CMD_BUTTON(
@@ -303,7 +303,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "8");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_9)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_9)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_9); //
 		EVE_CMD_BUTTON(
@@ -311,7 +311,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "9");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_4)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_4)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_4); //
 		EVE_CMD_BUTTON(
@@ -319,7 +319,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "4");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_5)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_5)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_5); //
 		EVE_CMD_BUTTON(
@@ -327,7 +327,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "5");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_6)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_6)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_6); //
 		EVE_CMD_BUTTON(
@@ -335,7 +335,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "6");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_1)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_1)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_1); //
 		EVE_CMD_BUTTON(
@@ -343,7 +343,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "1");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_2)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_2)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_2); //
 		EVE_CMD_BUTTON(
@@ -351,7 +351,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "2");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_3)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_3)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_3); //
 		EVE_CMD_BUTTON(
@@ -359,7 +359,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "3");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_0)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (pScan->KeyTag == TAG_PAD_0)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_0); //
 		EVE_CMD_BUTTON(
@@ -369,7 +369,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 
 		if (key_state.Components & KEYBOARD_COMPONENTS_KEYPAD_DOT)
 		{
-			button_colour = (pScan->KeyTag == TAG_PAD_DOT)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+			button_colour = (pScan->KeyTag == TAG_PAD_DOT)?button_bg_highlight:button_bg;
 			EVE_CMD_FGCOLOR(button_colour);
 			EVE_TAG(TAG_PAD_DOT); //
 			EVE_CMD_BUTTON(
@@ -380,7 +380,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 	}
 	else
 	{
-		button_colour = (pScan->KeyTag == TAG_PAD_7)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_7)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_7); // Home
 		EVE_CMD_BUTTON(
@@ -388,7 +388,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "Home");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_8)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_8)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_8); // Up Arrow
 		EVE_CMD_BUTTON(
@@ -396,7 +396,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x02");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_9)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_9)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_9); // Page Up
 		EVE_CMD_BUTTON(
@@ -404,7 +404,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "PgUp");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_4)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_4)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_4); // Left Arrow
 		EVE_CMD_BUTTON(
@@ -412,7 +412,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x01");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_5)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_5)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_5); // Blank
 		EVE_CMD_BUTTON(
@@ -420,7 +420,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_6)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_6)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_6); // Right Arrow
 		EVE_CMD_BUTTON(
@@ -428,7 +428,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x03");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_1)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_1)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_1); // End
 		EVE_CMD_BUTTON(
@@ -436,7 +436,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "End");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_2)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_2)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_2); // Down Arrow
 		EVE_CMD_BUTTON(
@@ -444,7 +444,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_alt, EVE_OPT_FLAT, "\x04");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_3)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_3)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_3); // Page Down
 		EVE_CMD_BUTTON(
@@ -452,7 +452,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(1), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "PgDn");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_0)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_0)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_0); // Insert
 		EVE_CMD_BUTTON(
@@ -460,7 +460,7 @@ static void draw_keypad(struct key_report *pReport, struct key_scan *pScan)
 				KEY_WIDTH_KEYPAD(2), KEY_HEIGHT_KEYPAD(1),
 				font_normal, EVE_OPT_FLAT, "Ins");
 
-		button_colour = (pScan->KeyTag == TAG_PAD_DOT)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_PAD_DOT)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_PAD_DOT); // Delete
 		EVE_CMD_BUTTON(
@@ -477,7 +477,7 @@ static void draw_function_keys(struct key_scan *pScan)
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_ESCAPE)
 	{
-		button_colour = (pScan->KeyTag == TAG_ESCAPE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_ESCAPE)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_ESCAPE); // Escape
 		EVE_CMD_BUTTON(
@@ -492,7 +492,7 @@ static void draw_function_keys(struct key_scan *pScan)
 		{
 			char name[4];
 			sprintf(name, "F%d", i + 1);
-			button_colour = (pScan->KeyTag == (TAG_F1 + i))?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+			button_colour = (pScan->KeyTag == (TAG_F1 + i))?button_bg_highlight:button_bg_alt;
 			EVE_CMD_FGCOLOR(button_colour);
 			EVE_TAG(TAG_F1 + i); // F1 to F12
 			EVE_CMD_BUTTON(
@@ -509,19 +509,18 @@ static void draw_function_keys(struct key_scan *pScan)
 static void draw_leds(struct key_report *pReport)
 {
 	EVE_TAG(TAG_NO_ACTION);
-	EVE_COLOR(KEY_COLOUR_BG_LEDS);
+	EVE_COLOR(button_bg_alt);
 	EVE_BEGIN(EVE_BEGIN_RECTS);
 	EVE_VERTEX2F((KEY_COL_STATUS(7) - KEY_HEIGHT_STATUS/2) * 16, KEY_ROW_STATUS(1) * 16);
 	EVE_VERTEX2F((KEY_COL_STATUS(7) + KEY_HEIGHT_STATUS/2 + KEY_WIDTH_STATUS(3)) * 16, KEY_ROW_STATUS(2) * 16);
 
-	//EVE_CMD_BGCOLOR(KEY_COLOUR_BG_LEDS);
 	if (pReport->Numeric)
 	{
-		EVE_COLOR_RGB(255, 255, 0);
+		EVE_COLOR(led_on);
 	}
 	else
 	{
-		EVE_COLOR_RGB(32, 32, 0);
+		EVE_COLOR(led_off);
 	}
 	EVE_POINT_SIZE(10 * 16);
 	EVE_BEGIN(EVE_BEGIN_POINTS);
@@ -531,11 +530,11 @@ static void draw_leds(struct key_report *pReport)
 
 	if (pReport->Caps)
 	{
-		EVE_COLOR_RGB(255, 255, 0);
+		EVE_COLOR(led_on);
 	}
 	else
 	{
-		EVE_COLOR_RGB(32, 32, 0);
+		EVE_COLOR(led_off);
 	}
 	EVE_POINT_SIZE(10 * 16);
 	EVE_BEGIN(EVE_BEGIN_POINTS);
@@ -545,11 +544,11 @@ static void draw_leds(struct key_report *pReport)
 
 	if (pReport->Scroll)
 	{
-		EVE_COLOR_RGB(255, 255, 0);
+		EVE_COLOR(led_on);
 	}
 	else
 	{
-		EVE_COLOR_RGB(32, 32, 0);
+		EVE_COLOR(led_off);
 	}
 	EVE_POINT_SIZE(10 * 16);
 	EVE_BEGIN(EVE_BEGIN_POINTS);
@@ -557,7 +556,7 @@ static void draw_leds(struct key_report *pReport)
 			KEY_COL_STATUS(9) * 16,
 			(KEY_ROW_STATUS(1) + (KEY_HEIGHT_STATUS / 2)) * 16);
 
-	EVE_COLOR(KEY_COLOUR_FG_LEDS);
+	EVE_COLOR(button_fg);
 	EVE_CMD_TEXT(
 			KEY_COL_STATUS(7) + 36, KEY_ROW_STATUS(1) + (KEY_HEIGHT_STATUS / 2),
 			font_normal, EVE_OPT_CENTERX|EVE_OPT_CENTERY,"Num");
@@ -578,7 +577,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_COL_STATUS(0), KEY_ROW_STATUS(3) + (KEY_HEIGHT_STATUS / 2),
 			font_normal, EVE_OPT_CENTERY,"Volume:");
 
-	button_colour = (pScan->KeyTag == TAG_CC_MUTE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_MUTE)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_MUTE); // Volume mute
 	EVE_CMD_BUTTON(
@@ -586,7 +585,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Mute");
 
-	button_colour = (pScan->KeyTag == TAG_CC_VOL_DOWN)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_VOL_DOWN)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_VOL_DOWN); // Volume down
 	EVE_CMD_BUTTON(
@@ -594,7 +593,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Down");
 
-	button_colour = (pScan->KeyTag == TAG_CC_VOL_UP)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_VOL_UP)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_VOL_UP); // Volume up
 	EVE_CMD_BUTTON(
@@ -602,7 +601,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Up");
 
-	button_colour = (pScan->KeyTag == TAG_CC_PREV)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_PREV)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_PREV); // Previous Track
 	EVE_CMD_BUTTON(
@@ -610,7 +609,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Prev");
 
-	button_colour = (pScan->KeyTag == TAG_CC_STOP)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_STOP)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_STOP); // Stop Track
 	EVE_CMD_BUTTON(
@@ -618,7 +617,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Stop");
 
-	button_colour = (pScan->KeyTag == TAG_CC_PAUSE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_PAUSE)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_PAUSE); // Pause Track
 	EVE_CMD_BUTTON(
@@ -626,7 +625,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Pause");
 
-	button_colour = (pScan->KeyTag == TAG_CC_PLAY)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_PLAY)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_PLAY); // Play Track
 	EVE_CMD_BUTTON(
@@ -634,7 +633,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "Play");
 
-	button_colour = (pScan->KeyTag == TAG_CC_NEXT)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_NEXT)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_NEXT); // Next Track
 	EVE_CMD_BUTTON(
@@ -646,7 +645,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_COL_STATUS(0), KEY_ROW_STATUS(6) + (KEY_HEIGHT_STATUS / 2),
 			font_normal, EVE_OPT_CENTERY,"Other:");
 
-	button_colour = (pScan->KeyTag == TAG_CC_FIND)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_CC_FIND)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CC_FIND); // Find
 	EVE_CMD_BUTTON(
@@ -658,7 +657,7 @@ static void draw_media(struct key_report *pReport, struct key_scan *pScan)
 			KEY_COL_STATUS(0), KEY_ROW_STATUS(5) + (KEY_HEIGHT_STATUS / 2),
 			font_normal, EVE_OPT_CENTERY,"Power:");
 
-	button_colour = (pScan->KeyTag == TAG_SC_SLEEP)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_SC_SLEEP)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_SC_SLEEP); // Power sleep
 	EVE_CMD_BUTTON(
@@ -677,7 +676,7 @@ static void draw_layout_selectors(struct key_state *pState)
 			KEY_COL_STATUS(0), KEY_ROW_STATUS(3) + (KEY_HEIGHT_STATUS / 2),
 			font_normal, EVE_OPT_CENTERY,"Layout:");
 
-	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_US_ALPHA)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_US_ALPHA)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_US_ALPHA); // US Keyboard Layout
 	EVE_CMD_BUTTON(
@@ -685,7 +684,7 @@ static void draw_layout_selectors(struct key_state *pState)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "US");
 
-	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_UK_ALPHA)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_UK_ALPHA)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_UK_ALPHA); // UK Keyboard Layout
 	EVE_CMD_BUTTON(
@@ -693,7 +692,7 @@ static void draw_layout_selectors(struct key_state *pState)
 			KEY_WIDTH_STATUS(1), KEY_HEIGHT_STATUS,
 			font_normal, EVE_OPT_FLAT, "UK");
 
-	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_DE_ALPHA)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pState->Layout == KEYBOARD_LAYOUT_PC_DE_ALPHA)?button_bg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_DE_ALPHA); // German Keyboard Layout
 	EVE_CMD_BUTTON(
@@ -706,7 +705,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 {
 	uint32_t button_colour;
 
-	button_colour = (pScan->KeyTag == TAG_BACKSPACE)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->KeyTag == TAG_BACKSPACE)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_BACKSPACE); // Backspace
 	EVE_CMD_BUTTON(
@@ -716,7 +715,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_TAB)
 	{
-		button_colour = (pScan->KeyTag == TAG_TAB)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_TAB)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_TAB); // Tab
 		if (pScan->ShiftL || pScan->ShiftR)
@@ -735,7 +734,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 		}
 	}
 
-	button_colour = (pReport->Caps)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pReport->Caps)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_CAPS_LOCK); // Capslock
 	EVE_CMD_BUTTON(
@@ -743,7 +742,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 			KEY_WIDTH_ALPHA(1.75), KEY_HEIGHT_ALPHA,
 			font_normal, EVE_OPT_FLAT,"CapsLock");
 
-	button_colour = (pScan->KeyTag == TAG_SPACE)?  KEY_COLOUR_FG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+	button_colour = (pScan->KeyTag == TAG_SPACE)?  button_fg_highlight:button_bg;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_SPACE); // Space
 	EVE_CMD_BUTTON(
@@ -751,7 +750,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 			KEY_WIDTH_ALPHA(5.75), KEY_HEIGHT_ALPHA,
 			font_normal, EVE_OPT_FLAT, "Space");
 
-	button_colour = (pScan->ShiftR)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->ShiftR)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_SHIFTR); // Shift Right
 	EVE_CMD_BUTTON(
@@ -761,7 +760,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 
 	if (key_state.Components & KEYBOARD_COMPONENTS_MODIFIERS)
 	{
-		button_colour = (pScan->CtrlL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->CtrlL)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_CTRLL); // Ctrl Left
 		EVE_CMD_BUTTON(
@@ -769,7 +768,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.5), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT,"Ctrl");
 
-		button_colour = (pScan->WinL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->WinL)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_WINL); // Win Left
 		EVE_CMD_BUTTON(
@@ -777,7 +776,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT,"Gui");
 
-		button_colour = (pScan->Alt)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->Alt)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_ALT); // Alt Left
 		EVE_CMD_BUTTON(
@@ -785,7 +784,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT,"Alt");
 
-		button_colour = (pScan->AltGr)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->AltGr)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_ALTGR); // AltGr
 		EVE_CMD_BUTTON(
@@ -793,7 +792,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT,"AltGr");
 
-		button_colour = (pScan->WinR)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->WinR)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_WINR); // Win Right
 		EVE_CMD_BUTTON(
@@ -801,7 +800,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT, "Gui");
 
-		button_colour = (pScan->KeyTag == TAG_APP)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->KeyTag == TAG_APP)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_APP); // Context menu
 		EVE_CMD_BUTTON(
@@ -809,7 +808,7 @@ static void draw_keyboard_fixed_keys(struct key_report *pReport, struct key_scan
 				KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA,
 				font_normal, EVE_OPT_FLAT, "Menu");
 
-		button_colour = (pScan->CtrlR)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+		button_colour = (pScan->CtrlR)?button_bg_highlight:button_bg_alt;
 		EVE_CMD_FGCOLOR(button_colour);
 		EVE_TAG(TAG_CTRLR); // Ctrl Right
 		EVE_CMD_BUTTON(
@@ -835,7 +834,7 @@ static uint8_t draw_keys(int16_t x, int16_t y,
 		cdisp = (uint8_t)display[i];
 		cmap = (uint8_t)tag_array[i];
 
-		button_colour = (cmap == (uint8_t)options)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS;
+		button_colour = (cmap == (uint8_t)options)?button_bg_highlight:button_bg;
 		EVE_CMD_FGCOLOR(button_colour);
 
 		EVE_TAG(cmap);
@@ -915,7 +914,7 @@ static void draw_fixed_keys_uk_de(struct key_scan *pScan)
 {
 	uint32_t button_colour;
 
-	button_colour = (pScan->KeyTag == TAG_ENTER)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->KeyTag == TAG_ENTER)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_ENTER); // Enter
 	EVE_CMD_BUTTON(
@@ -923,7 +922,7 @@ static void draw_fixed_keys_uk_de(struct key_scan *pScan)
 			KEY_WIDTH_ALPHA(1.25), KEY_HEIGHT_ALPHA * 2 + KEY_SPACER_ALPHA,
 			font_normal, EVE_OPT_FLAT,"Enter");
 
-	button_colour = (pScan->ShiftL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->ShiftL)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_SHIFTL); // Shift Left
 	EVE_CMD_BUTTON(
@@ -1041,7 +1040,7 @@ static void draw_us_keyboard(struct key_report *pReport, struct key_scan *pScan)
 	uint32_t button_colour;
 	uint8_t offset = 1;
 
-	button_colour = (pScan->KeyTag == TAG_ENTER)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->KeyTag == TAG_ENTER)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_ENTER); // Enter
 	EVE_CMD_BUTTON(
@@ -1049,7 +1048,7 @@ static void draw_us_keyboard(struct key_report *pReport, struct key_scan *pScan)
 			KEY_WIDTH_ALPHA(2.25), KEY_HEIGHT_ALPHA,
 			font_normal, EVE_OPT_FLAT,"Enter");
 
-	button_colour = (pScan->ShiftL)?KEY_COLOUR_BG_BUTTONS_HIGHLIGHT:KEY_COLOUR_BG_BUTTONS_ALT;
+	button_colour = (pScan->ShiftL)?button_bg_highlight:button_bg_alt;
 	EVE_CMD_FGCOLOR(button_colour);
 	EVE_TAG(TAG_SHIFTL); // Shift Left
 	EVE_CMD_BUTTON(
@@ -1105,11 +1104,11 @@ static void draw_us_keyboard(struct key_report *pReport, struct key_scan *pScan)
 
 void eve_ui_keyboard_draw(struct key_report *pReport, struct key_scan *pScan)
 {
-	EVE_COLOR(KEY_COLOUR_FG_BUTTONS);
+	EVE_COLOR(button_fg);
 
 	// Colour for Special Function Keys
-	EVE_CMD_FGCOLOR(KEY_COLOUR_FG_BUTTONS_ALT);
-	EVE_CMD_BGCOLOR(KEY_COLOUR_BG_BUTTONS_ALT);
+	EVE_CMD_FGCOLOR(button_fg_alt);
+	EVE_CMD_BGCOLOR(button_bg_alt);
 
 	if (key_state.Screen == KEYBOARD_SCREEN_SETTINGS)
 	{

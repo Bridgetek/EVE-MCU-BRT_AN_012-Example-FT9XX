@@ -64,8 +64,15 @@
 
 /**
  @brief Allow click on the BridgeTek Logo to make a screenshot.
+ Set to P6 for a binary portable pixmap format (PPM).
+ Set to P3 for an ASCII portable pixmap format (PPM).
+ PPM format has 0-255 for each channel R, G, B.
  */
-#define ENABLE_SCREENSHOT
+//*{
+#define PPM_P6 6
+#define PPM_P3 3
+#define ENABLE_SCREENSHOT PPM_P6
+//*}
 
 /* GLOBAL VARIABLES ****************************************************************/
 
@@ -135,34 +142,71 @@ void eve_ui_calibrate()
 void eve_ui_screenshot()
 {
 #ifdef ENABLE_SCREENSHOT
-	uint8_t buffer[256];
-	int i, j;
-	uint32_t img_end_address = malloc_ram_g(1);
+	uint32_t line_address;
+	uint32_t line_count = 0;
+	uint32_t pixel_counter = 0;
+	uint32_t c_data = 0;
+	uint8_t c_red = 0;
+	uint8_t c_green = 0;
+	uint8_t c_blue = 0;
+
+	line_address = malloc_ram_g(EVE_DISP_WIDTH * sizeof(uint32_t));
 
 	printf("Screenshot...\n");
 
-	// Write screenshot into RAM_G
-	EVE_LIB_BeginCoProList();
-	EVE_CMD_DLSTART();
-	EVE_CMD_SNAPSHOT(img_end_address);
-	EVE_LIB_EndCoProList();
-	EVE_LIB_AwaitCoProEmpty();
+	// Use this marker to identify the start of the image.
+	printf("ARGB start\n");
 
-	printf("ARGB start\n"); // Use this marker to identify the start of the image.
-	for (i = 0; i < (EVE_DISP_WIDTH * 2) * EVE_DISP_HEIGHT; i += sizeof(buffer))
+    // Notes on SnapShot2 (see Programmers Guide)
+    //   0x20 means ARGB8 format
+    //   Pointer specifies destination of snapshot data in RAM_G
+    //   X value: 0 means the snapshot begins at X = 0 (start of row)
+    //   Y Value: line_count specifies Y as current row number
+    //   Width: Width of Snapshot is 2 * Screen Width (the 2 * is required if ARGB8)
+    //   Height: Height is always 1 row as we are taking the snapshot line-by-line
+
+	// Send PPM header depending on the setting for ENABLE_SCREENSHOT
+	printf("P%d %d %d 255 ", ENABLE_SCREENSHOT, EVE_DISP_WIDTH, EVE_DISP_HEIGHT);
+
+	while(line_count < EVE_DISP_HEIGHT)
 	{
-		EVE_LIB_ReadDataFromRAMG(buffer, sizeof(buffer), img_end_address+ i);
-		for (j = 0; j < sizeof(buffer); j++)
+  		EVE_LIB_BeginCoProList();
+		EVE_CMD_SNAPSHOT2(0x20, line_address, 0, line_count, (EVE_DISP_WIDTH * 2), 1); 	// 0x20 = ARGB8
+		EVE_LIB_EndCoProList();
+		EVE_LIB_AwaitCoProEmpty();
+		eve_ui_arch_sleepms(20); // ensure co-pro has finished taking snapshot
+
+  		pixel_counter = 0;
+		while(pixel_counter < (EVE_DISP_WIDTH * sizeof(uint32_t)))
 		{
-			printf("%c", buffer[j]);
+			c_data = HAL_MemRead32(line_address + pixel_counter);
+
+			c_red = (uint8_t) (c_data >> 16);
+			c_green = (uint8_t) (c_data >> 8);
+			c_blue = (uint8_t) ((c_data >> 0));
+#if ENABLE_SCREENSHOT == PPM_P6
+			printf("%c%c%c", c_red, c_green, c_blue);
+#elif ENABLE_SCREENSHOT == PPM_P3
+			printf("%d %d %d ", c_red, c_green, c_blue);
+#endif // ENABLE_SCREENSHOT
+
+			pixel_counter += sizeof(uint32_t); // increment address
+
+#if ENABLE_SCREENSHOT == PPM_P3
+			if ((pixel_counter % (5 * sizeof(uint32_t))) == 0)
+			{
+				printf("\n");
+			}
+#endif // ENABLE_SCREENSHOT
 		}
+		line_count ++;
 	}
-	printf("ARGB end\n"); // Marker to identify the end of the image.
 
-	//eve_ui_splash("Screenshot completed...", 0);
-	eve_ui_arch_sleepms(2000);
+	printf("\nARGB end\n"); // Marker to identify the end of the image.
 
-	free_ram_g(img_end_address);
+	eve_ui_arch_sleepms(500);
+	free_ram_g(line_address);
+
 #endif // ENABLE_SCREENSHOT
 }
 

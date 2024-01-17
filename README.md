@@ -6,9 +6,9 @@ Application Note BRT_AN_012 FT9xx USBD HID Touch Panel.
 See https://brtchip.com/software-examples/ft9xx-examples/
 
 Demonstrates a USB HID implementing a Virtual Keyboard display on an Bridgetek EVE screen. 
-It uses the [BRT_AN_025](https://github.com/Bridgetek/EVE-MCU-BRT_AN_025) library. 
+It uses the [BRT_AN_025](https://github.com/Bridgetek/EVE-MCU-BRT_AN_025) EVE library. 
 
-This project requires a BridgeTek MM900EVxB board and FT812 or BT817 board and display.
+This project requires a BridgeTek MM900EVxB board and FT812 or BT817 board and display. It is written to allow easy porting to other MCUs.
 
 ## Information
 
@@ -240,12 +240,14 @@ Windows will not reload a driver for a device with the same VID/PID and serial n
 # Software Implementation
 
 The application note implements a USB HID class device which can be accessed by a USB host with appropriate driver software. 
-The USB device code is implemented in `main.c` and USB HID class specific code is in `keyboard.c`. 
-All virtual keyboard drawing is carried out in the `eve_ui` library which invokes the eve library for low-level control of the FT81X/BT8XX device.
+The USB device code is implemented in `main.c` and USB HID class specific code is in `usb_keyboard.c`.
+Control of the screen is performed by `eve_keyboard.c`. 
+This includes all the screen layout except the keyboard area which is drawn in the `eve_ui_keyboard` library.
+All virtual keyboard drawing will use aspects of the `eve_ui` library which in-turn invokes the EVE library for low-level control of the BT817 device.
 
-Keypress events detected on the virtual keyboard will generate “tags” which uniquely represent one keyboard action. 
+Keypress events detected on the virtual keyboard will generate "tags" which uniquely represent one keyboard action. 
 These tags indicate that a key has been pressed, such as a letter or number key. 
-Each tag received will be converted into a HID report and sent to the host via USB.
+Each tag received by the `eve_ui_keyboard` library will be converted into a HID report in `main.c` and sent to the host via USB.
 
 ## USB Implementation Overview
 
@@ -356,15 +358,15 @@ The report ID for system controls is 1.
 The FT81X/BT8XX device relies on a method called a display list to determine what is shown on the screen. 
 This means that a new display list is generated only when a display change is required. 
 
-Each virtual “key” on the keyboard is assigned a unique tag. 
+Each virtual "key" on the keyboard is assigned a unique tag. 
 The function `eve_ui_keyboard_loop` in `eve_ui_keyboard.c` source code file detects a touchscreen press and returns the tag of the button.
-Some buttons are reserved within the `eve_ui` library to enable switching between keyboard, keypad, media and special screens. 
+Some buttons are reserved within the `eve_ui_keyboard` library to enable switching between keyboard, keypad, media and special screens. 
 
-The `eve_ui` library is designed to isolate the screen drawing and management from the features of the USB keyboard device. 
+The `eve_ui_keyboard` library is designed to isolate the screen drawing and management from the features of the USB keyboard device. 
 This will allow it to be used as data entry method for other applications. 
-Only decoding of `eve_ui` defined tags to actions (or characters) is needed to add text entry. 
+Only decoding of `eve_ui_keyboard` defined tags to actions (or characters) is needed to add text entry. 
 
-The screen header is specifically drawn in `eve_ui_main.c` to allow for the library to be expanded with additional methods.
+The screen header is specifically drawn in `eve_keyboard.c` to allow for the library to be expanded with additional methods.
 
 ## Optional Features
 
@@ -378,7 +380,7 @@ A special screen is demonstrated which has a key layout specific to an applicati
 
 The application note is intended to be used on an ME812A-WH50R or ME813A-WH50C EVE development module with an MM900EV2A or MM900EV3A MCU module. 
 The application note is written to work on an 800 by 600 display. 
-Changes to the EVE module or FT9XX device can be made in the `FT_platform.h` file in the `Includes` folder of the source code.
+Changes to the EVE module or FT9XX device can be made in the `EVE_config.h` file in the `Includes` folder of the source code.
 
 The MM900EVxA module connects directly to the EVE development module with a set of pin headers. 
 The QSPI interface on the FT9XX device is taken through the pin headers to the FT81X/BT8XX on the EVE module. 
@@ -404,21 +406,22 @@ Pressing “Settings” in the upper left hand corner will display an alphanumer
 Pressing the “KeyPad” button will show the control and keypad area of a standard keyboard. 
 To return to the main keyboard press the “Keyboard” button again.
 
- 
  ![Virtual KeyPad Screen](docs/Figure9.jpg "Virtual KeyPad Screen")
 
 **Figure 9 Virtual KeyPad Screen**
 
-Pressing the “Z” button will show the special application screen. The keyboard or keypad can then be accessed with appropriate buttons.
-
+Pressing the "Z" button will show the special application screen. 
 There is no functionality in the special application screen.
+The keyboard or keypad can still be accessed with appropriate buttons.
 
 ##	Keyboard Layouts
 
-There are 3 different layouts for keys supported in this application. 
+There are 3 different layouts for keys supported in this application:
+
 The US and UK layouts are QWERTY layouts where the key positions change slightly; 
 the German layout is QWERTZ, however the layout is the same as the UK layout. 
-For the German keyboard to work the host needs to have its keyboard locale set to German to allow the scan codes to match the key labels.
+
+For each keyboard to work the host needs to have its keyboard locale set to the keyboard layout correctly to allow the scan codes to match the key labels.
 
 # Appendix C – Revision History
 
