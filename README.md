@@ -21,7 +21,8 @@ A virtual keyboard is displayed on a touchscreen display and behaves as a standa
 
 The keyboard can be set to show different keyboard layouts for different regional variations.
 
-![Block Diagram](docs/Figure1.png "Block Diagram")
+| ![Block Diagram](docs/Figure1.png "Block Diagram")|
+|-|
 
 **Figure 1 Block Diagram**
 
@@ -115,14 +116,16 @@ The makefile is run before the main code is compiled and refreshes the source fi
 
 In Eclipse Project Properties, a new “Builder” is added before the “CDT Builder”. The builder is shown in Figure 2.
 
-![Builders Project Settings](docs/Figure2.png "Builders Project Settings") 
+| ![Builders Project Settings](docs/Figure2.png "Builders Project Settings") |
+|-|
 
 **Figure 2 Builders Project Settings**
 
 When the “Images Builder” is run it invokes the makefile which generates the assembler files. 
 The builder settings are shown in Figure 3. 
 
-![Images Builder Settings](docs/Figure3.png "Images Builder Settings") 
+| ![Images Builder Settings](docs/Figure3.png "Images Builder Settings") |
+|-|
 
 **Figure 3 Images Builder Settings**
 
@@ -195,7 +198,8 @@ The project code can be imported into the FT9xx Toolchain.
 
 Select `File` --> `Import` --> `General` --> `Existing Projects into Eclipse`, and point to the location of the downloaded project directory.
 
-![Eclipse Project](docs/Figure4.png "Eclipse Project")
+| ![Eclipse Project](docs/Figure4.png "Eclipse Project")|
+|-|
 
 **Figure 4 Eclipse Project**
 
@@ -257,7 +261,8 @@ The endpoints on these interfaces will produce one of 3 different report descrip
 The first interface is a “Boot Report” type interface with a single endpoint producing a single report to the host; 
 the second interface can either produce Application Reports (Power Down, Suspend etc.) or Consumer Control Reports (Media Controls etc.).
 
-![USB Interface Diagram](docs/Figure5.png "USB Interface Diagram")
+| ![USB Interface Diagram](docs/Figure5.png "USB Interface Diagram")|
+|-|
 
 **Figure 5 USB Interface Diagram**
 
@@ -273,7 +278,8 @@ This code is ignored in this text and excluded by the pre-processor in the sourc
 
 The logical model of the USB device software, as coded in `main.c`, is as follows:
 
-![USB Device Software Flow](docs/Figure6.png "USB Device Software Flow")
+| ![USB Device Software Flow](docs/Figure6.png "USB Device Software Flow")|
+|-|
 
 **Figure 6 USB Device Software Flow**
 
@@ -386,7 +392,8 @@ The MM900EVxA module connects directly to the EVE development module with a set 
 The QSPI interface on the FT9XX device is taken through the pin headers to the FT81X/BT8XX on the EVE module. 
 The host PC connects via USB to the MM900EVxA module.
 
-![MM900EV2A and ME812A-WH50R module](docs/Figure7.jpg "MM900EV2A and ME812A-WH50R module")
+| ![MM900EV2A and ME812A-WH50R module](docs/Figure7.jpg "MM900EV2A and ME812A-WH50R module")|
+|-|
 
 **Figure 7 MM900EV2A and ME812A-WH50R module**
 
@@ -396,7 +403,8 @@ The virtual keyboard will wait until it is connected to a host. The FT81X/BT8XX 
 
 Once the host is connected then it will display the virtual keyboard.
 
- ![Virtual Keyboard Screen](docs/Figure8.jpg "Virtual Keyboard Screen")
+| ![Virtual Keyboard Screen](docs/Figure8.jpg "Virtual Keyboard Screen")|
+|-|
 
 **Figure 8 Virtual Keyboard Screen**
 
@@ -406,7 +414,8 @@ Pressing “Settings” in the upper left hand corner will display an alphanumer
 Pressing the “KeyPad” button will show the control and keypad area of a standard keyboard. 
 To return to the main keyboard press the “Keyboard” button again.
 
- ![Virtual KeyPad Screen](docs/Figure9.jpg "Virtual KeyPad Screen")
+| ![Virtual KeyPad Screen](docs/Figure9.jpg "Virtual KeyPad Screen")|
+|-|
 
 **Figure 9 Virtual KeyPad Screen**
 
